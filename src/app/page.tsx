@@ -1,103 +1,187 @@
-import Image from "next/image";
+'use client';
+
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+
+const gdpData = [
+  { year: '2019', value: 21.43 },
+  { year: '2020', value: 20.95 },
+  { year: '2021', value: 23.32 },
+  { year: '2022', value: 25.46 },
+  { year: '2023', value: 26.95 },
+  { year: '2024', value: 27.36 }
+];
+
+const unemploymentData = [
+  { month: 'Jan', rate: 3.7 },
+  { month: 'Feb', rate: 3.5 },
+  { month: 'Mar', rate: 3.8 },
+  { month: 'Apr', rate: 3.4 },
+  { month: 'May', rate: 4.0 },
+  { month: 'Jun', rate: 4.0 },
+  { month: 'Jul', rate: 4.3 },
+  { month: 'Aug', rate: 4.2 },
+  { month: 'Sep', rate: 4.1 },
+  { month: 'Oct', rate: 4.1 },
+  { month: 'Nov', rate: 4.2 },
+  { month: 'Dec', rate: 3.7 }
+];
+
+const interestRatesData = [
+  { year: '2019', rate: 1.75 },
+  { year: '2020', rate: 0.25 },
+  { year: '2021', rate: 0.25 },
+  { year: '2022', rate: 4.25 },
+  { year: '2023', rate: 5.25 },
+  { year: '2024', rate: 4.75 }
+];
+
+const bondYieldsData = [
+  { year: '2019', yield: 2.14 },
+  { year: '2020', yield: 0.93 },
+  { year: '2021', yield: 1.44 },
+  { year: '2022', yield: 3.01 },
+  { year: '2023', yield: 4.05 },
+  { year: '2024', yield: 4.25 }
+];
+
+function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: React.ReactNode }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      <div className="mb-4">
+        <h3 className="text-sm font-medium text-gray-900 mb-1">{title}</h3>
+        <p className="text-xs text-gray-600">{subtitle}</p>
+      </div>
+      <div className="h-48">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function Sidebar() {
+  return (
+    <div className="w-64 bg-white border-r border-gray-200 h-screen p-4">
+      <div className="mb-6">
+        <h1 className="text-lg font-semibold text-gray-900">FRED Indicators</h1>
+        <p className="text-sm text-gray-600">Economic Data Dashboard</p>
+      </div>
+      
+      <nav className="space-y-2">
+        <div className="bg-blue-100 text-blue-900 px-3 py-2 rounded-md text-sm font-medium flex items-center">
+          <span className="mr-2">📊</span>
+          Key Indicators
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">📈</span>
+          Inflation
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">👥</span>
+          Employment
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">💰</span>
+          Interest Rates
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">💹</span>
+          Economic Growth
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">💱</span>
+          Exchange Rates
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">🏠</span>
+          Housing
+        </div>
+        <div className="text-gray-700 hover:bg-gray-100 px-3 py-2 rounded-md text-sm font-medium cursor-pointer flex items-center">
+          <span className="mr-2">🛒</span>
+          Consumer Spending
+        </div>
+      </nav>
+      
+      <div className="mt-8 pt-8 border-t border-gray-200 text-xs text-gray-500">
+        Data provided by Federal Reserve<br />
+        Economic Data (FRED)
+      </div>
+    </div>
+  );
+}
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex bg-gray-50 min-h-screen">
+      <Sidebar />
+      
+      <main className="flex-1 p-6">
+        <div className="mb-6">
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Economic Indicators Dashboard</h1>
+          <p className="text-gray-600">Real-time economic data from the Federal Reserve Economic Data (FRED) system</p>
+        </div>
+        
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <ChartCard 
+            title="GDP - Last five years" 
+            subtitle="Gross Domestic Product (Seasonally Adjusted Annual Rate)"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={gdpData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="year" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip />
+                <Line type="monotone" dataKey="value" stroke="#2563eb" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          
+          <ChartCard 
+            title="Initial Annual Labor Statistics: Unemployment Rate Total" 
+            subtitle="Unemployment Rate - All persons 16 years and over"
           >
-            Read our docs
-          </a>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={unemploymentData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="month" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip />
+                <Line type="monotone" dataKey="rate" stroke="#2563eb" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          
+          <ChartCard 
+            title="Interest Rates: Long-Term Government Bond Yields: 10-Year" 
+            subtitle="10-Year Treasury Constant Maturity Rate"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={interestRatesData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="year" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip />
+                <Line type="monotone" dataKey="rate" stroke="#2563eb" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
+          
+          <ChartCard 
+            title="Interest Rates: 3-Month or 90-Day Rates and Yields" 
+            subtitle="3-Month Treasury Bill: Secondary Market Rate"
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={bondYieldsData}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                <XAxis dataKey="year" fontSize={12} />
+                <YAxis fontSize={12} />
+                <Tooltip />
+                <Line type="monotone" dataKey="yield" stroke="#2563eb" strokeWidth={2} dot={{ r: 4 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </ChartCard>
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
     </div>
   );
 }
